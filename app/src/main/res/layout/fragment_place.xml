@@ -30,6 +30,24 @@
             android:background="@drawable/search_bg"/>
     </FrameLayout>
 
+    <TextView
+        android:id="@+id/search_city"
+        android:layout_below="@id/actionBarLayout"
+        android:layout_marginTop="20dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:text="最近搜索"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <GridView
+        android:id="@+id/search_item"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/search_city"
+        android:layout_marginTop="2dp"
+        android:numColumns="3"></GridView>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"

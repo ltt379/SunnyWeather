@@ -12,8 +12,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".ui.weather.WeatherActivity"></activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".init.RegisterActivity"/>
+        <activity android:name=".MainActivity"/>
+        <activity android:name=".init.ForgetPasswordActivity"/>
+        <activity android:name=".ui.user.DialogPassword"/>
+        <activity android:name=".ui.user.AppShare"/>
+
+        <activity android:name=".init.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

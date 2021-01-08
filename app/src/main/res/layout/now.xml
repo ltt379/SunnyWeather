@@ -25,7 +25,7 @@
             android:layout_height="30dp"
             android:layout_marginLeft="365dp"
             android:layout_gravity="center_vertical"
-            android:background="@drawable/ic_home" />
+            android:background="@drawable/ic_user" />
         <TextView
             android:id="@+id/placeName"
             android:layout_width="wrap_content"

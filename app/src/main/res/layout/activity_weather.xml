@@ -42,14 +42,27 @@
         android:clickable="true"
         android:focusable="true"
         android:background="@color/colorPrimary">
-
         <fragment
             android:id="@+id/placeFragment"
             android:name="com.sunnyweather.android.ui.place.PlaceFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="25dp"/>
+    </FrameLayout>
 
+    <FrameLayout
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@color/colorPrimary">
+        <fragment
+            android:id="@+id/userFragment"
+            android:name="com.sunnyweather.android.ui.user.UserFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="25dp"/>
     </FrameLayout>
 
 </androidx.drawerlayout.widget.DrawerLayout>

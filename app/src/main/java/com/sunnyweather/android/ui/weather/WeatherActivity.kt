@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -18,17 +19,20 @@ import androidx.lifecycle.ViewModelProviders
 import com.sunnyweather.android.R
 import com.sunnyweather.android.logic.model.Weather
 import com.sunnyweather.android.logic.model.getSky
+import com.sunnyweather.android.ui.user.ActivityCollector
 import kotlinx.android.synthetic.main.activity_weather.*
 import kotlinx.android.synthetic.main.forecast.*
+import kotlinx.android.synthetic.main.fragment_place.*
 import kotlinx.android.synthetic.main.life_index.*
 import kotlinx.android.synthetic.main.now.*
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 class WeatherActivity : AppCompatActivity() {
 
     val viewModel by lazy { ViewModelProviders.of(this).get(WeatherViewModel::class.java) }
-
+    var hotCitys = arrayOf("青岛市", "黄岛区","北京市","上海市", "山东省")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= 21) {
@@ -63,6 +67,13 @@ class WeatherActivity : AppCompatActivity() {
         }
         navBtn.setOnClickListener {
             drawerLayout.openDrawer(GravityCompat.START)
+            var adapter: ArrayAdapter<String>
+            adapter = ArrayAdapter<String>(this, R.layout.item_hotcity, hotCitys)
+            search_item.adapter = adapter
+
+        }
+        usrBtn.setOnClickListener {
+            drawerLayout.openDrawer(GravityCompat.END)
         }
         drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
             override fun onDrawerStateChanged(newState: Int) {}
@@ -76,15 +87,26 @@ class WeatherActivity : AppCompatActivity() {
                 manager.hideSoftInputFromWindow(drawerView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
             }
         })
+        ActivityCollector.addActivity(this)
     }
-
+    override fun onDestroy() {
+        super.onDestroy()
+        //用于删除当前Activity到activities的List中：用于可以随时随地的退出程序
+        ActivityCollector.removeActivity(this)
+    }
     fun refreshWeather() {
         viewModel.refreshWeather(viewModel.locationLng, viewModel.locationLat)
         swipeRefresh.isRefreshing = true
     }
 
+    var isfirstclick=true
     private fun showWeatherInfo(weather: Weather) {
         placeName.text = viewModel.placeName
+        hotCitys.fill(hotCitys[3],4,5)
+        hotCitys.fill(hotCitys[2],3,4)
+        hotCitys.fill(hotCitys[1],2,3)
+        hotCitys.fill(hotCitys[0],1,2)
+        hotCitys.fill(placeName.text.toString(),0,1)
         val realtime = weather.realtime
         val daily = weather.daily
         // 填充now.xml布局中数据
@@ -97,22 +119,31 @@ class WeatherActivity : AppCompatActivity() {
         // 填充forecast.xml布局中的数据
         forecastLayout.removeAllViews()
         val days = daily.skycon.size
-        for (i in 0 until days) {
-            val skycon = daily.skycon[i]
-            val temperature = daily.temperature[i]
-            val view = LayoutInflater.from(this).inflate(R.layout.forecast_item, forecastLayout, false)
-            val dateInfo = view.findViewById(R.id.dateInfo) as TextView
-            val skyIcon = view.findViewById(R.id.skyIcon) as ImageView
-            val skyInfo = view.findViewById(R.id.skyInfo) as TextView
-            val temperatureInfo = view.findViewById(R.id.temperatureInfo) as TextView
-            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            dateInfo.text = simpleDateFormat.format(skycon.date)
-            val sky = getSky(skycon.value)
-            skyIcon.setImageResource(sky.icon)
-            skyInfo.text = sky.info
-            val tempText = "${temperature.min.toInt()} ~ ${temperature.max.toInt()} ℃"
-            temperatureInfo.text = tempText
-            forecastLayout.addView(view)
+        clickForecast.setOnClickListener {
+            if(isfirstclick) {
+                for (i in 0 until days) {
+                    val skycon = daily.skycon[i]
+                    val temperature = daily.temperature[i]
+                    val view = LayoutInflater.from(this).inflate(R.layout.forecast_item, forecastLayout, false)
+                    val dateInfo = view.findViewById(R.id.dateInfo) as TextView
+                    val skyIcon = view.findViewById(R.id.skyIcon) as ImageView
+                    val skyInfo = view.findViewById(R.id.skyInfo) as TextView
+                    val temperatureInfo = view.findViewById(R.id.temperatureInfo) as TextView
+                    val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                    dateInfo.text = simpleDateFormat.format(skycon.date)
+                    val sky = getSky(skycon.value)
+                    skyIcon.setImageResource(sky.icon)
+                    skyInfo.text = sky.info
+                    val tempText = "${temperature.min.toInt()} ~ ${temperature.max.toInt()} ℃"
+                    temperatureInfo.text = tempText
+                    forecastLayout.addView(view)
+                }
+            }
+            isfirstclick = false
+        }
+        clickForecastBack.setOnClickListener {
+            forecastLayout.removeAllViews()
+            isfirstclick = true
         }
         // 填充life_index.xml布局中的数据
         val lifeIndex = daily.lifeIndex
