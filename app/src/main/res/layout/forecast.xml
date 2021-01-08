@@ -25,17 +25,19 @@
             android:id="@+id/clickForecast"
             android:textColor="?android:attr/textColorPrimary"
             android:textSize="20sp"/>
+
         <TextView
+            android:id="@+id/clickForecastBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="350dp"
+            android:layout_alignLeft="@+id/clickForecast"
+            android:layout_marginStart="100dp"
+            android:layout_marginLeft="344dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
-            android:layout_alignLeft="@+id/clickForecast"
             android:drawableTop="@drawable/ic_back"
-            android:id="@+id/clickForecastBack"
             android:textColor="?android:attr/textColorPrimary"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
 
         <LinearLayout
             android:id="@+id/forecastLayout"
