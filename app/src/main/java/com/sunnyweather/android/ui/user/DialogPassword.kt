@@ -49,6 +49,7 @@ class DialogPassword : AppCompatActivity() {
             }
         }
         builder.setNegativeButton("取消") {_,_->
+            val intent = Intent(this@DialogPassword, MainActivity::class.java)
             startActivityForResult(intent, 1)
         }
         builder.show()
